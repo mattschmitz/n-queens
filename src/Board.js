@@ -204,6 +204,15 @@
         }
       }
       return false;
+    },
+
+    //log a visual of the board: 
+    log: function() {
+      var matrix = [];
+      for (var i = 0; i < this.get('n'); i++) {
+        matrix.push(this.get(i));
+      }
+      console.log(matrix.join('\n'));
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/

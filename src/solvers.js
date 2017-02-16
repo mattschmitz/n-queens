@@ -68,6 +68,7 @@ window.countNRooksSolutions = function(n) {
   
   var genBoards = function(row, board) {
     if (row === n) {
+      //board.log();
       solutionCount++;
       return;
     }
@@ -79,7 +80,6 @@ window.countNRooksSolutions = function(n) {
       board.togglePiece(row, i);
     }
   };
-
   genBoards(0, new Board({n: n})); 
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
