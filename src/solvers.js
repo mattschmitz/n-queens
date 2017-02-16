@@ -16,9 +16,45 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var n = 4;
+  var solution = [];
+  // Create a new board to attempt combinations
+  var board = new Board({n: n});
+  // Start at 0,0
+  //debugger;
+  var counter = 0;
 
+  var findSol = function(board, start) {   
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        board.togglePiece(i, j);
+        if (board.hasRowConflictAt(i) || board.hasColConflictAt(j) || (i === 0 && j < start)) {
+          board.togglePiece(i, j);
+        } else {
+          counter++;
+        }
+      }
+    }
+  };
+
+  findSol(board, 2);
+
+  //if board doesn't pass (i.e. if counter is <n)
+    //counter = 0;
+    //finsSol(board, different starting postion);
+
+  //push to solution
+
+  // Create solution matrix
+  for (var i = 0; i < n; i++) {
+    // Push every row in board to solution
+    solution.push(board.get(i));
+  }
+
+  debugger;
+  // Print solution
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  // Return solution matrix
   return solution;
 };
 
