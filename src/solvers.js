@@ -69,6 +69,7 @@ window.countNRooksSolutions = function(n) {
   var genBoards = function(row, board) {
     if (row === n) {
       //board.log();
+
       solutionCount++;
       return;
     }
@@ -88,15 +89,64 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = []; //fixme
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  var genBoards = function(row, board) {
+    if (row === n) {
+      solution.push(board.duplicate());
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      board.togglePiece(row, i);
+      var indexMajD = board._getFirstRowColumnIndexForMajorDiagonalOn(row, i);
+      var indexMinD = board._getFirstRowColumnIndexForMinorDiagonalOn(row, i);
+
+      if (!board.hasRowConflictAt(row) && !board.hasColConflictAt(i) 
+          && !board.hasMajorDiagonalConflictAt(indexMajD) && !board.hasMinorDiagonalConflictAt(indexMinD)) {
+        genBoards(row + 1, board);
+      } 
+      board.togglePiece(row, i);
+    }
+  };
+
+  genBoards(0, new Board({n: n}));
+
+  // We need to return a matrix so we will take our first solution and break it up into a matrix
+  var oneSol = [];
+  if (solution[0]) {
+    oneSol = solution[0].duplicateMatrix();
+  } else { //no solutions - return empty matrix of size n
+    var blank = new Board({n: n });
+    oneSol = blank.duplicateMatrix();
+  }
+
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(oneSol));
+  return oneSol;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; 
+  
+  var genBoards = function(row, board) {
+    if (row === n) {
+      //board.log();
+      solutionCount++;
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      board.togglePiece(row, i);
+      var indexMajD = board._getFirstRowColumnIndexForMajorDiagonalOn(row, i);
+      var indexMinD = board._getFirstRowColumnIndexForMinorDiagonalOn(row, i);
+
+      if (!board.hasRowConflictAt(row) && !board.hasColConflictAt(i) 
+          && !board.hasMajorDiagonalConflictAt(indexMajD) && !board.hasMinorDiagonalConflictAt(indexMinD)) {
+        genBoards(row + 1, board);
+      }
+      board.togglePiece(row, i);
+    }
+  };
+  genBoards(0, new Board({n: n})); 
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;

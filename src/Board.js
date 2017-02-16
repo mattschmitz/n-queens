@@ -213,6 +213,22 @@
         matrix.push(this.get(i));
       }
       console.log(matrix.join('\n'));
+    },
+
+    duplicate: function() {
+      var duplicate = [];
+      for (var i = 0; i < this.get('n'); i++) {
+        duplicate.push(this.get(i).slice());
+      }
+      return new Board(duplicate);
+    },
+
+    duplicateMatrix: function() {
+      var duplicate = [];
+      for (var i = 0; i < this.get('n'); i++) {
+        duplicate.push(this.get(i).slice());
+      }
+      return (duplicate);
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
