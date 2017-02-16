@@ -64,60 +64,25 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
- 
-  var solutionCount = 0; //fixme
-  var board = new Board({n: n});
-
-  var logBoard = function(board) {
-    console.log(JSON.stringify(board._currentAttributes));
-  };
-
-  // Create a recursive function that takes a board and a row counter
+  var solutionCount = 0; 
+  
   var genBoards = function(row, board) {
-    var newboard = board || new Board({n: n});
-
     if (row === n) {
-      if (!newboard.hasAnyRowConflicts() && !newboard.hasAnyColConflicts()) {
-        solutionCount++;
-      }
+      solutionCount++;
       return;
     }
-
     for (var i = 0; i < n; i++) {
-      newboard.togglePiece(row, i);
-      genBoards(row + 1, newboard);
-      newboard.togglePiece(row, i);
+      board.togglePiece(row, i);
+      if (!board.hasRowConflictAt(row) && !board.hasColConflictAt(i)) {
+        genBoards(row + 1, board);
+      }
+      board.togglePiece(row, i);
     }
-
   };
 
-  genBoards(0);
-
-
-  // var findSol = function(board, row) {
-  //   debugger;
-  //   logBoard();
-
-  //   for (var col = 0; col < n; col++) { // Loop through from 0 to n and create n instances of board with one piece at i
-
-  //     board.togglePiece(row, col); logBoard();
-
-  //     if (board.hasRowConflictAt(row) || board.hasColConflictAt(col)) { // If there's a conflict, untoggle and return
-  //       board.togglePiece(row, col); logBoard();
-  //     } else if (row === n - 1) { // Else check if we've reached the end
-  //       solutionCount++;
-  //       return;
-  //     } else { // If not, recall function passing in our current board and incremented row counter
-  //       findSol(board, row + 1);
-  //     }
-  //   }
-
-  // };
-
-  // findSol(board, 0);
+  genBoards(0, new Board({n: n})); 
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  debugger;
   return solutionCount;
 };
 
